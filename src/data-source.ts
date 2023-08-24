@@ -36,7 +36,7 @@ const setDataSourceConfig = (): DataSourceOptions => {
     username: process.env.PGUSER,
     password: process.env.PGPASSWORD,
     port: parseInt(process.env.PGPORT),
-    database: process.env.DB,
+    database: process.env.PGDATABASE,
     synchronize: false,
     logging: true,
     entities: [entitiesPath],
