@@ -30,6 +30,7 @@ export const listAllProductService = async (
       "products.productAvailable",
       "productPurchases.price",
       "productPurchases.discount",
+      "products.expirationDate",
     ])
     .skip((page - 1) * limit)
     .take(limit)

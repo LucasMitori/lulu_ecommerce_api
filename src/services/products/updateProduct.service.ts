@@ -18,6 +18,12 @@ export const updateProductService = async (
       throw new AppError("Product not found", 404);
     });
 
+  if (productData.expirationDate) {
+    const expirationDate = new Date(productData.expirationDate);
+
+    productToUpdate.expirationDate = expirationDate;
+  }
+
   const updatedProduct = {
     ...productToUpdate,
     ...productData,

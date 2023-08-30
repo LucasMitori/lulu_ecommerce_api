@@ -1,4 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { Purchases } from "./purchases.entity";
 import { Products } from "./products.entity";
 import { IsNotEmpty, IsOptional, Length } from "class-validator";
@@ -8,7 +16,7 @@ export class ProductPurchases {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type:"int", width: 10 })
+  @Column({ type: "decimal", width: 10, scale: 2 })
   @IsNotEmpty()
   @Length(2, 10)
   price: number;
@@ -36,7 +44,7 @@ export class ProductPurchases {
 
   @UpdateDateColumn()
   updatedAt: Date;
-    
+
   @ManyToOne(() => Purchases, (purchase) => purchase.productPurchases)
   @JoinColumn()
   purchase: Purchases;

@@ -1,7 +1,10 @@
 import { AppDataSource } from "../../data-source";
 import { Products } from "../../entities/products.entity";
 import { User } from "../../entities/user.entity";
-import { INewProduct, IRegisterProduct } from "../../interfaces/products.interfaces";
+import {
+  INewProduct,
+  IRegisterProduct,
+} from "../../interfaces/products.interfaces";
 import { ProductPurchases } from "../../entities/product_purchase.entity";
 import { AppError } from "../../errors";
 
@@ -12,9 +15,8 @@ export const registerProductService = async (
 ): Promise<INewProduct> => {
   const userRepository = AppDataSource.getRepository(User);
   const productRepository = AppDataSource.getRepository(Products);
-  const productPurchaseRepository = AppDataSource.getRepository(
-    ProductPurchases
-  );
+  const productPurchaseRepository =
+    AppDataSource.getRepository(ProductPurchases);
 
   const user = await userRepository.findOne({
     where: { id },
@@ -29,14 +31,15 @@ export const registerProductService = async (
   const newProduct = {
     price: product.price,
     discount: product.discount,
-    product: product
-  }
-  
+    product: product,
+    expirationDate: new Date(product.expirationDate),
+  };
+
   await productPurchaseRepository.save(newProduct);
 
-  const result = {...product, newProduct}
+  const result = { ...product, newProduct };
 
-  delete result.newProduct
+  delete result.newProduct;
 
-  return result as INewProduct
+  return result as INewProduct;
 };

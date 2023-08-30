@@ -1,58 +1,73 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { ProductPurchases } from "./product_purchase.entity";
 import { IsNotEmpty, IsOptional, Length } from "class-validator";
 
 @Entity("products")
 export class Products {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ type: "varchar", length: 255 })
-    @IsNotEmpty()
-    @Length(2, 255)
-    name: string;
+  @Column({ type: "varchar", length: 255 })
+  @IsNotEmpty()
+  @Length(2, 255)
+  name: string;
 
-    @Column({ type: "text" })
-    @IsNotEmpty()
-    description: string;
+  @Column({ type: "text" })
+  @IsNotEmpty()
+  description: string;
 
-    @Column({ type: "varchar", length: 255 })
-    @IsOptional()
-    @Length(2, 255)
-    imageUrl: string;
+  @Column({ type: "varchar", length: 255 })
+  @IsOptional()
+  @Length(2, 255)
+  imageUrl: string;
 
-    @Column({ length: 100 })
-    @IsNotEmpty()
-    @Length(2, 100)
-    category: string;
+  @Column({ type: "date" })
+  @IsNotEmpty()
+  expirationDate: Date;
 
-    @Column({ type:"int", width:20 })
-    @IsNotEmpty()
-    @Length(2, 20)
-    instock: number;
+  @Column({ length: 100 })
+  @IsNotEmpty()
+  @Length(2, 100)
+  category: string;
 
-    @Column({ type: "json" })
-    @IsOptional()
-    tags: any[]
+  @Column({ type: "int", width: 20 })
+  @IsNotEmpty()
+  @Length(2, 20)
+  instock: number;
 
-    @Column({ type:"json" })
-    @IsOptional()
-    reviews: any[]
+  @Column({ type: "json" })
+  @IsOptional()
+  tags: any[];
 
-    @Column({ length: 20 })
-    @IsNotEmpty()
-    @Length(2, 20)
-    productAvailable: string;
+  @Column({ type: "json" })
+  @IsOptional()
+  reviews: any[];
 
-    @CreateDateColumn()
-    createdAt: Date;
+  @Column({ length: 20 })
+  @IsNotEmpty()
+  @Length(2, 20)
+  productAvailable: string;
 
-    @UpdateDateColumn()
-    updatedAt: Date;
-  
-    @DeleteDateColumn()
-    deletedAt: Date;
+  @CreateDateColumn()
+  createdAt: Date;
 
-    @OneToMany(() => ProductPurchases, (productPurchases) => productPurchases.product)
-    productPurchases: ProductPurchases[];
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
+
+  @OneToMany(
+    () => ProductPurchases,
+    (productPurchases) => productPurchases.product
+  )
+  productPurchases: ProductPurchases[];
 }
