@@ -56,6 +56,14 @@ export class Products {
   @Length(2, 20)
   productAvailable: string;
 
+  @Column({ length: 255 })
+  @IsNotEmpty()
+  @Length(2, 255)
+  brand: string;
+
+  @Column("simple-array", { nullable: true })
+  carouselImages: string[] | null;
+
   @CreateDateColumn()
   createdAt: Date;
 

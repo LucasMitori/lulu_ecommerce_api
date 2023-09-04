@@ -8,6 +8,8 @@ export interface IProduct {
   tags?: any[];
   reviews?: any[];
   productAvailable: string;
+  brand: string;
+  carouselImages: string[];
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date | null;
@@ -27,6 +29,8 @@ export interface IListProduct {
   tags?: any[];
   reviews?: any[];
   productAvailable: string;
+  brand: string;
+  carouselImages: string[];
   productsPurchases: IListProductPurchases[];
   createdAt?: Date;
   updatedAt?: Date;
@@ -45,6 +49,8 @@ export interface INewProduct {
   tags: string[];
   reviews: string[];
   productAvailable: string;
+  brand: string;
+  carouselImages: string[];
   price: number;
   expirationDate: Date;
   discount: number;
@@ -59,6 +65,8 @@ export interface IRegisterProduct {
   tags?: any[];
   reviews?: any[];
   productAvailable: string;
+  brand: string;
+  carouselImages: string[];
   price: number;
   expirationDate: Date;
   discount: number;
@@ -89,6 +97,8 @@ export interface IProductUpdate {
   tags?: any[];
   reviews?: any[];
   productAvailable: string;
+  brand: string;
+  carouselImages: string[];
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date | null;

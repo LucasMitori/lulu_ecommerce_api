@@ -33,6 +33,8 @@ export const registerProductService = async (
     discount: product.discount,
     product: product,
     expirationDate: new Date(product.expirationDate),
+    brand: product.brand,
+    carouselImages: product.carouselImages,
   };
 
   await productPurchaseRepository.save(newProduct);

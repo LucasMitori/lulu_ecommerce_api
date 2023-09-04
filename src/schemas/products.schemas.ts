@@ -20,6 +20,8 @@ const registerProductRequestSchema: SchemaOf<IRegisterProduct> = yup
     price: yup.number().required(),
     discount: yup.number().required(),
     expirationDate: yup.date().required(),
+    brand: yup.string().required(),
+    carouselImages: yup.array().of(yup.string()).required(),
   });
 
 const listAllProductSchema: SchemaOf<IProduct[]> = yup.array(
@@ -48,6 +50,8 @@ const listAllProductSchema: SchemaOf<IProduct[]> = yup.array(
     price: yup.number().notRequired(),
     discount: yup.number().notRequired(),
     expirationDate: yup.date().notRequired(),
+    brand: yup.string().notRequired(),
+    carouselImages: yup.array().of(yup.string()).notRequired(),
   })
 );
 
@@ -75,6 +79,8 @@ const updateProductSchema: SchemaOf<IProductUpdate> = yup.object().shape({
   price: yup.number().notRequired(),
   discount: yup.number().notRequired(),
   expirationDate: yup.date().notRequired(),
+  brand: yup.string().notRequired(),
+  carouselImages: yup.array().of(yup.string()).notRequired(),
 });
 
 export {
