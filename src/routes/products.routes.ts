@@ -5,6 +5,7 @@ import { ensureAuthMiddleware } from "../middlewares/ensure.authorization.middle
 import { registerProductRequestSchema } from "../schemas/products.schemas";
 import {
   deleteProductController,
+  listProductsByCategoryController,
   listProductsController,
   registerProductController,
   updateProductController,
@@ -15,6 +16,12 @@ import { ensureUserIsAdmin } from "../middlewares/ensureUserIsAdm.middleware";
 export const productRoutes = Router();
 
 productRoutes.get("", ensureAuthMiddleware, listProductsController);
+
+productRoutes.get(
+  "/:category",
+  ensureAuthMiddleware,
+  listProductsByCategoryController
+);
 
 productRoutes.post(
   "",
