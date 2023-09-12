@@ -3,6 +3,22 @@ export interface IPurchase {
   purchaseStatus: string;
   qrCode?: string;
   quantity: number;
+  productId: number;
+}
+
+export interface INewPurchase {
+  paymentID: number;
+  purchaseStatus: string;
+  qrCode?: string;
+  purchases: {
+    productId: number;
+    quantity: number;
+  }[];
+  total: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date;
+  userId: string;
 }
 
 export interface IPurchaseResponse {

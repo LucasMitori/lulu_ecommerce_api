@@ -7,14 +7,15 @@ import { AppError } from "../../errors";
 import { INewPurchase, IPurchase } from "../../interfaces/purchases.interfaces";
 
 export const registerPurchaseService = async (
-  purchase: IPurchase,
+  purchase: INewPurchase,
   userID: string,
   productId: number,
   token: string
 ): Promise<INewPurchase> => {
   const userRepository = AppDataSource.getRepository(User);
   const purchaseRepository = AppDataSource.getRepository(Purchases);
-  const productPurchaseRepository = AppDataSource.getRepository(ProductPurchases);
+  const productPurchaseRepository =
+    AppDataSource.getRepository(ProductPurchases);
   const productRepository = AppDataSource.getRepository(Products);
 
   const user = await userRepository.findOne({
@@ -25,14 +26,6 @@ export const registerPurchaseService = async (
     throw new AppError("User not found");
   }
 
-  const productPurchase = await productPurchaseRepository.findOne({
-    where: { product: { id: productId } },
-  });
-
-  if (!productPurchase) {
-    throw new AppError("Product purchase not found");
-  }
-
   const existingPurchase = await purchaseRepository.findOne({
     where: { paymentID: purchase.paymentID },
   });
@@ -41,49 +34,87 @@ export const registerPurchaseService = async (
     throw new AppError("Purchase with the same paymentID was found.");
   }
 
-  const product = await productRepository.findOne({
-    where: { id: productId },
-  });
+  // The middleware already checked product stock, so we can proceed with the purchase.
 
-  if (!product) {
-    throw new AppError("Product not found");
+  const productPurchases: ProductPurchases[] = [];
+  const productsToPurchase: {
+    productId: number;
+    quantity: number;
+  }[] = [];
+
+  for (const purchaseItem of purchase.purchases) {
+    const productPurchase = await productPurchaseRepository.findOne({
+      where: { product: { id: purchaseItem.productId } },
+    });
+
+    if (!productPurchase) {
+      throw new AppError(
+        `Product purchase not found for productId: ${purchaseItem.productId}`
+      );
+    }
+
+    // Fetch the associated product entity
+    productPurchase.product = await productRepository.findOne({
+      where: { id: purchaseItem.productId },
+    });
+
+    if (!productPurchase.product) {
+      throw new AppError(
+        `Product not found for productId: ${purchaseItem.productId}`
+      );
+    }
+
+    // Update product stock
+    productPurchase.product.instock -= purchaseItem.quantity;
+
+    await productRepository.save(productPurchase.product);
+
+    const newTotal = +(
+      productPurchase.price * purchaseItem.quantity -
+      productPurchase.price *
+        purchaseItem.quantity *
+        (productPurchase.discount / 100)
+    ).toFixed(2);
+
+    productPurchase.quantity = purchaseItem.quantity;
+    productPurchase.total = newTotal;
+    productPurchase.purchaseDate = new Date();
+
+    productPurchases.push(productPurchase);
+    productsToPurchase.push({
+      productId: purchaseItem.productId,
+      quantity: purchaseItem.quantity,
+    });
   }
 
-  const newTotal = +(productPurchase.price * purchase.quantity -
-    ((productPurchase.price * purchase.quantity) * (productPurchase.discount/100))).toFixed(2);
-  
-
-  if (productPurchase.quantity + purchase.quantity > product.instock) {
-    throw new AppError(`Not enough stock to complete the purchase. the stock is: ${product.instock}`, 409);
-  }
-
-  productPurchase.quantity = purchase.quantity;
-  productPurchase.total = newTotal;
-  productPurchase.purchaseDate = new Date();
+  // Save the updated product stock and product purchases
+  await Promise.all(
+    productPurchases.map((p) => productPurchaseRepository.save(p))
+  );
 
   const newPurchase = purchaseRepository.create({
     paymentID: purchase.paymentID,
     purchaseStatus: purchase.purchaseStatus,
     qrCode: purchase.qrCode,
     user,
-    productPurchases: [productPurchase],
+    productPurchases,
   });
 
-  product.instock -= purchase.quantity;
+  await purchaseRepository.save(newPurchase);
 
-  await Promise.all([
-    purchaseRepository.save(newPurchase),
-    productPurchaseRepository.save(productPurchase),
-    productRepository.save(product),
-  ]);
+  const total = productPurchases.reduce(
+    (sum, productPurchase) => sum + productPurchase.total,
+    0
+  );
 
-  const result = {
+  const result: INewPurchase = {
     paymentID: purchase.paymentID,
     purchaseStatus: purchase.purchaseStatus,
     qrCode: purchase.qrCode,
-    quantity: productPurchase.quantity,
-    total: productPurchase.total,
+    purchases: purchase.purchases,
+    total,
     userId: userID,
+    quantity: purchase.quantity,
   };
 
   return result;

@@ -1,6 +1,10 @@
 import * as yup from "yup";
 import { SchemaOf } from "yup";
-import { IPurchase, IPurchaseList, IPurchaseResponse } from "../interfaces/purchases.interfaces";
+import {
+  IPurchase,
+  IPurchaseList,
+  IPurchaseResponse,
+} from "../interfaces/purchases.interfaces";
 
 const productPurchaseSchema = yup.object().shape({
   id: yup.number().required(),
@@ -20,12 +24,19 @@ const purchaseResponseSchema: SchemaOf<IPurchaseResponse> = yup.object().shape({
   product_purchases: yup.array(productPurchaseSchema).required(),
 });
 
-const purchaseRequestSchema: SchemaOf<IPurchase> = yup.object().shape({
-  paymentID: yup.number().required(),
-  purchaseStatus: yup.string().required(),
-  qrCode: yup.string().notRequired(),
-  quantity: yup.number().required(),
-});
+const purchaseRequestSchema: SchemaOf<{ purchases: IPurchase[] }> = yup
+  .object()
+  .shape({
+    purchases: yup.array().of(
+      yup.object().shape({
+        paymentID: yup.number().required(),
+        purchaseStatus: yup.string().required(),
+        qrCode: yup.string().notRequired(),
+        productId: yup.number().required(),
+        quantity: yup.number().required(),
+      })
+    ),
+  });
 
 const listAllPurchaseSchema: SchemaOf<IPurchaseResponse[]> = yup.array(
   yup.object().shape({
