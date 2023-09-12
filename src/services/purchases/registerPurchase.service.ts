@@ -34,8 +34,6 @@ export const registerPurchaseService = async (
     throw new AppError("Purchase with the same paymentID was found.");
   }
 
-  // The middleware already checked product stock, so we can proceed with the purchase.
-
   const productPurchases: ProductPurchases[] = [];
   const productsToPurchase: {
     productId: number;
@@ -53,7 +51,6 @@ export const registerPurchaseService = async (
       );
     }
 
-    // Fetch the associated product entity
     productPurchase.product = await productRepository.findOne({
       where: { id: purchaseItem.productId },
     });
@@ -64,7 +61,6 @@ export const registerPurchaseService = async (
       );
     }
 
-    // Update product stock
     productPurchase.product.instock -= purchaseItem.quantity;
 
     await productRepository.save(productPurchase.product);
@@ -87,7 +83,6 @@ export const registerPurchaseService = async (
     });
   }
 
-  // Save the updated product stock and product purchases
   await Promise.all(
     productPurchases.map((p) => productPurchaseRepository.save(p))
   );

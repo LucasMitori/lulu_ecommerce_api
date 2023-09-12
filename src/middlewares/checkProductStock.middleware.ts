@@ -4,11 +4,9 @@ import { AppError } from "../errors";
 import { AppDataSource } from "../data-source";
 import { Products } from "../entities/products.entity";
 
-// Define an interface for purchaseItem
 interface PurchaseItem {
   productId: number;
   quantity: number;
-  // Add other properties if needed
 }
 
 export const checkProductStockMiddleware = async (
@@ -20,7 +18,7 @@ export const checkProductStockMiddleware = async (
     AppDataSource.getRepository(ProductPurchases);
   const productRepository = AppDataSource.getRepository(Products);
 
-  const purchases: PurchaseItem[] = req.body.purchases; // Use the interface
+  const purchases: PurchaseItem[] = req.body.purchases;
 
   for (const purchaseItem of purchases) {
     const productPurchase = await productPurchaseRepository.findOne({
