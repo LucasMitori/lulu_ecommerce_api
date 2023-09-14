@@ -2,6 +2,7 @@ export interface IProduct {
   id: number;
   name: string;
   description: string;
+  size: string;
   imageUrl?: string;
   category: string;
   instock: number;
@@ -23,6 +24,7 @@ export interface IListProduct {
   id: number;
   name: string;
   description: string;
+  size: string;
   imageUrl?: string;
   category: string;
   instock: number;
@@ -43,6 +45,7 @@ export interface IListProduct {
 export interface INewProduct {
   name: string;
   description: string;
+  size: string;
   imageUrl: string;
   category: string;
   instock: number;
@@ -59,6 +62,7 @@ export interface INewProduct {
 export interface IRegisterProduct {
   name: string;
   description: string;
+  size: string;
   imageUrl?: string;
   category: string;
   instock: number;
@@ -91,6 +95,7 @@ export interface IListProductPurchases {
 export interface IProductUpdate {
   name: string;
   description: string;
+  size: string;
   imageUrl?: string;
   category: string;
   instock: number;

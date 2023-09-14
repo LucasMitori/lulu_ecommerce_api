@@ -22,6 +22,7 @@ export const listAllProductService = async (
       "products.id",
       "products.name",
       "products.description",
+      "products.size",
       "products.imageUrl",
       "products.category",
       "products.instock",

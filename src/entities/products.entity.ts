@@ -24,6 +24,11 @@ export class Products {
   @IsNotEmpty()
   description: string;
 
+  @Column({ type: "varchar", length: 20 })
+  @IsNotEmpty()
+  @Length(2, 20)
+  size: string;
+
   @Column({ type: "varchar", length: 255 })
   @IsOptional()
   @Length(2, 255)

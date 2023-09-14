@@ -25,6 +25,7 @@ export const getOnePurchaseService = async (
   const productPurchases = purchase.productPurchases.map((pp) => ({
     id: pp.id,
     name: pp.product.name,
+    size: pp.product.size,
     price: pp.price,
     discount: pp.discount,
     quantity: pp.quantity,

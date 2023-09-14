@@ -24,6 +24,7 @@ export const listProductCategory = async (
       "products.id",
       "products.name",
       "products.description",
+      "products.size",
       "products.imageUrl",
       "products.category",
       "products.instock",

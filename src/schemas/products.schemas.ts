@@ -11,6 +11,7 @@ const registerProductRequestSchema: SchemaOf<IRegisterProduct> = yup
   .shape({
     name: yup.string().required(),
     description: yup.string().required(),
+    size: yup.string().required(),
     imageUrl: yup.string().required(),
     category: yup.string().required(),
     instock: yup.number().required(),
@@ -29,6 +30,7 @@ const listAllProductSchema: SchemaOf<IProduct[]> = yup.array(
     id: yup.number().required(),
     name: yup.string().required(),
     description: yup.string().required(),
+    size: yup.string().required(),
     imageUrl: yup.string(),
     category: yup.string().required(),
     instock: yup.number().required(),
@@ -58,6 +60,7 @@ const listAllProductSchema: SchemaOf<IProduct[]> = yup.array(
 const updateProductSchema: SchemaOf<IProductUpdate> = yup.object().shape({
   name: yup.string().notRequired(),
   description: yup.string().notRequired(),
+  size: yup.string().required(),
   imageUrl: yup.string().notRequired(),
   category: yup.string().notRequired(),
   instock: yup.number().notRequired(),
