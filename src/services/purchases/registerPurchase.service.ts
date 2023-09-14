@@ -35,12 +35,15 @@ export const registerPurchaseService = async (
   }
 
   const productPurchases: ProductPurchases[] = [];
+
   const productsToPurchase: {
     productId: number;
     quantity: number;
   }[] = [];
 
   for (const purchaseItem of purchase.purchases) {
+    const newProductPurchase = new ProductPurchases();
+
     const productPurchase = await productPurchaseRepository.findOne({
       where: { product: { id: purchaseItem.productId } },
     });
@@ -72,11 +75,14 @@ export const registerPurchaseService = async (
         (productPurchase.discount / 100)
     ).toFixed(2);
 
-    productPurchase.quantity = purchaseItem.quantity;
-    productPurchase.total = newTotal;
-    productPurchase.purchaseDate = new Date();
+    newProductPurchase.product = productPurchase.product;
+    newProductPurchase.price = productPurchase.price;
+    newProductPurchase.quantity = purchaseItem.quantity;
+    newProductPurchase.discount = productPurchase.discount;
+    newProductPurchase.total = newTotal;
+    newProductPurchase.purchaseDate = new Date();
 
-    productPurchases.push(productPurchase);
+    productPurchases.push(newProductPurchase);
     productsToPurchase.push({
       productId: purchaseItem.productId,
       quantity: purchaseItem.quantity,

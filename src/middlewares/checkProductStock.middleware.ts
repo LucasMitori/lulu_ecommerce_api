@@ -45,7 +45,7 @@ export const checkProductStockMiddleware = async (
       );
     }
 
-    if (productPurchase.quantity + purchaseItem.quantity > product.instock) {
+    if (purchaseItem.quantity > product.instock) {
       return next(
         new AppError(
           `Not enough stock to complete the purchase for productId: ${purchaseItem.productId}, the actual stock is: ${product.instock}`,

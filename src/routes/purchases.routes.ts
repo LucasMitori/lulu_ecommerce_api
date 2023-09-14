@@ -2,6 +2,7 @@ import { Router } from "express";
 import "dotenv/config";
 import {
   ListAllPurchasesController,
+  ListOnePurchaseController,
   ListPersonalPurchasesController,
   deletePurchaseController,
   registerMultiplePurchasesController,
@@ -23,6 +24,12 @@ purchasesRoutes.get(
   ensureAuthMiddleware,
   ensureUserExistsMiddleware,
   ListPersonalPurchasesController
+);
+purchasesRoutes.get(
+  "/user/payment/:payid",
+  ensureAuthMiddleware,
+  ensureUserExistsMiddleware,
+  ListOnePurchaseController
 );
 
 purchasesRoutes.post(

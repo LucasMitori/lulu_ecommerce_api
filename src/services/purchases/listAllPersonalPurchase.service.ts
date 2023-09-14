@@ -3,17 +3,20 @@ import { Purchases } from "../../entities/purchases.entity";
 import { IPurchaseResponse } from "../../interfaces/purchases.interfaces";
 import { listAllPurchaseSchema } from "../../schemas/purchases.schemas";
 
-export const ListAllPersonalPurchaseService = async (userId: string): Promise<IPurchaseResponse[]> => {
+export const ListAllPersonalPurchaseService = async (
+  userId: string
+): Promise<IPurchaseResponse[]> => {
   const purchaseRepository = AppDataSource.getRepository(Purchases);
 
-  const purchases = await purchaseRepository.createQueryBuilder("purchases")
+  const purchases = await purchaseRepository
+    .createQueryBuilder("purchases")
     .leftJoinAndSelect("purchases.productPurchases", "product_purchases")
     .leftJoinAndSelect("product_purchases.product", "products")
     .where("purchases.userId = :userId", { userId })
     .getMany();
 
-  const purchaseResponse: IPurchaseResponse[] = purchases.map(purchase => {
-    const productPurchases = purchase.productPurchases.map(pp => ({
+  const purchaseResponse: IPurchaseResponse[] = purchases.map((purchase) => {
+    const productPurchases = purchase.productPurchases.map((pp) => ({
       id: pp.id,
       name: pp.product.name,
       price: pp.price,
@@ -32,9 +35,12 @@ export const ListAllPersonalPurchaseService = async (userId: string): Promise<IP
     };
   });
 
-  const validatedPurchaseResponse = await listAllPurchaseSchema.validate(purchaseResponse, {
-    stripUnknown: true,
-  });
+  const validatedPurchaseResponse = await listAllPurchaseSchema.validate(
+    purchaseResponse,
+    {
+      stripUnknown: true,
+    }
+  );
 
   return validatedPurchaseResponse;
 };

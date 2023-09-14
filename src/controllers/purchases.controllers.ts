@@ -4,6 +4,7 @@ import { INewPurchase, IPurchase } from "../interfaces/purchases.interfaces";
 import { deletePurchaseService } from "../services/purchases/deletePurchase.service";
 import { listPurchaseService } from "../services/purchases/listPurchase.service";
 import { ListAllPersonalPurchaseService } from "../services/purchases/listAllPersonalPurchase.service";
+import { getOnePurchaseService } from "../services/purchases/getOnePurchase.service";
 
 export const ListAllPurchasesController = async (
   req: Request,
@@ -19,6 +20,16 @@ export const ListPersonalPurchasesController = async (
 ) => {
   const { id } = req.params;
   const personalPurchases = await ListAllPersonalPurchaseService(id);
+  return res.json(personalPurchases);
+};
+
+export const ListOnePurchaseController = async (
+  req: Request,
+  res: Response
+) => {
+  const { payid } = req.params;
+
+  const personalPurchases = await getOnePurchaseService(Number(payid));
   return res.json(personalPurchases);
 };
 
