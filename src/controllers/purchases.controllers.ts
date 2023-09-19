@@ -1,10 +1,15 @@
 import { registerPurchaseService } from "./../services/purchases/registerPurchase.service";
 import { Request, Response } from "express";
-import { INewPurchase, IPurchase } from "../interfaces/purchases.interfaces";
+import {
+  INewPurchase,
+  IPurchase,
+  IPurchaseUpdate,
+} from "../interfaces/purchases.interfaces";
 import { deletePurchaseService } from "../services/purchases/deletePurchase.service";
 import { listPurchaseService } from "../services/purchases/listPurchase.service";
 import { ListAllPersonalPurchaseService } from "../services/purchases/listAllPersonalPurchase.service";
 import { getOnePurchaseService } from "../services/purchases/getOnePurchase.service";
+import { updatePurchaseService } from "../services/purchases/updatePurchase.service";
 
 export const ListAllPurchasesController = async (
   req: Request,
@@ -67,6 +72,13 @@ export const registerMultiplePurchasesController = async (
   }
 
   return res.status(201).json(results);
+};
+
+export const updatePurchaseController = async (req: Request, res: Response) => {
+  const productData: IPurchaseUpdate = req.body;
+  const productID: number = parseInt(req.params.id);
+  const updatedUser = await updatePurchaseService(productID, productData);
+  return res.json(updatedUser);
 };
 
 export const deletePurchaseController = async (req: Request, res: Response) => {

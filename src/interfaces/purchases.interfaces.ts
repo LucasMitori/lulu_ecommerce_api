@@ -21,6 +21,13 @@ export interface INewPurchase {
   userId: string;
 }
 
+export interface IPurchaseUpdate {
+  purchaseStatus: string;
+  qrCode?: string;
+  quantity?: number;
+  productId?: number;
+}
+
 export interface IPurchaseResponse {
   paymentID: number;
   purchaseStatus: string;

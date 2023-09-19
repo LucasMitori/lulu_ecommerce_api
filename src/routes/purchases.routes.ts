@@ -6,6 +6,7 @@ import {
   ListPersonalPurchasesController,
   deletePurchaseController,
   registerMultiplePurchasesController,
+  updatePurchaseController,
 } from "../controllers/purchases.controllers";
 import { ensureDataValidationMiddleware } from "../middlewares/ensureDataValidation.middleware";
 import { purchaseRequestSchema } from "../schemas/purchases.schemas";
@@ -13,6 +14,7 @@ import { ensureAuthMiddleware } from "../middlewares/ensure.authorization.middle
 import { ensureInputIsUuidMiddleware } from "../middlewares/ensureInputIsUuid.middleware";
 import { ensureUserExistsMiddleware } from "../middlewares/ensureUserExists.middleware";
 import { checkProductStockMiddleware } from "../middlewares/checkProductStock.middleware";
+import { ensureValidRequestInputMiddleware } from "../middlewares/ensureValidRequestInput.middleware";
 
 export const purchasesRoutes = Router();
 
@@ -38,6 +40,13 @@ purchasesRoutes.post(
   ensureDataValidationMiddleware(purchaseRequestSchema),
   checkProductStockMiddleware,
   registerMultiplePurchasesController
+);
+
+purchasesRoutes.patch(
+  "/:id",
+  ensureAuthMiddleware,
+  ensureValidRequestInputMiddleware,
+  updatePurchaseController
 );
 
 purchasesRoutes.delete("/:id", ensureAuthMiddleware, deletePurchaseController);

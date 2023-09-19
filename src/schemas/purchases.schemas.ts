@@ -55,9 +55,19 @@ const listPurchaseSchema: SchemaOf<IPurchaseList[]> = yup.array(
   })
 );
 
+const updatePurchaseSchema = yup.object().shape({
+  id: yup.string().required(),
+  paymentID: yup.number().required(),
+  purchaseStatus: yup.string().required(),
+  qrCode: yup.string().required(),
+  createdAt: yup.date().required(),
+  updatedAt: yup.date().required(),
+});
+
 export {
   purchaseRequestSchema,
   purchaseResponseSchema,
   listAllPurchaseSchema,
   listPurchaseSchema,
+  updatePurchaseSchema,
 };
